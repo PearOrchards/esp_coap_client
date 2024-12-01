@@ -85,7 +85,9 @@ project/
  |- ...
 ```
 
-The root `CMakeLists.txt` should be okay left alone, though you made need to add the following line if you use CI/CD:
+### Updating CMakeLists.txt
+
+The root `CMakeLists.txt` _should_ be okay left alone, though you may need to add the following line if you use CI/CD:
 ```cmake
 if (CI)
     ...
@@ -94,7 +96,7 @@ if (CI)
 endif()
 ```
 
-The `main/CMakeLists.txt` should look like this (at least):
+The `main/CMakeLists.txt` should look like this (at the minimum):
 ```cmake
 idf_component_register(SRCS main.cpp INCLUDE_DIRS "." REQUIRES CoAPClient)
 ```
@@ -142,5 +144,9 @@ extern "C" {
 
 You will have the issue if, during compilation, you see errors to do with missing types, such as `coap_pdu_t` or `coap_session_t`.
 
+_Note: the moved include statement MUST be inside `extern "C"` brackets, else you will likely get linker errors. I found this out the hard way._
+
 ## Contributing and Issues
-If you have any issues, please open an issue on this repository. If you'd like to contribute, please open a pull request. I'm happy to accept any contributions, but remember the limitations of this library. If you're looking to add a feature, it may be better to fork this repository and create your own library.
+If you have any problems using this class, please open an issue on this repository, and I'll try get back to you as soon as possible.
+
+If you'd like to contribute, please open a pull request. I'm happy to accept any contributions, but remember the simplicity of this "library". If you're looking to add a lot of features, it may be better to fork this repository and create your own.
