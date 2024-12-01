@@ -2,6 +2,7 @@
 #include "coap3/coap.h"
 
 int CoAPClient::resolve_address(const coap_str_const_t *host, const uint16_t port, coap_address_t *dst, const int scheme_hint_bits) {
+    // This was lifted pretty much exactly from the libcoap examples.
     int ret = 0;
 
     coap_addr_info_t *addr_info = coap_resolve_address_info(host, port, port,  port, port,AF_UNSPEC, scheme_hint_bits, COAP_RESOLVE_TYPE_REMOTE);
@@ -15,7 +16,7 @@ int CoAPClient::resolve_address(const coap_str_const_t *host, const uint16_t por
 }
 
 void CoAPClient::create_req(const char *in_uri, const coap_response_handler_t &handler, const coap_pdu_code_t method) {
-    coap_session_t *session;
+    // I've heard it's typically bad practice to define as you go along, but I'm not doing all that.
 
     // Parse URI
     coap_uri_t uri;
@@ -27,6 +28,7 @@ void CoAPClient::create_req(const char *in_uri, const coap_response_handler_t &h
     len = resolve_address(&uri.host, uri.port, &dst, 1 << uri.scheme);
     if (len <= 0) coap_log_err("Failed to resolve addr %*.*s\n", static_cast<int>(uri.host.length), static_cast<int>(uri.host.length), reinterpret_cast<const char *>(uri.host.s));
 
+    coap_session_t *session;
     if (uri.scheme == COAP_URI_SCHEME_COAP) {
         session = coap_new_client_session(ctx, nullptr, &dst, COAP_PROTO_UDP);
     } else {
@@ -64,6 +66,7 @@ void CoAPClient::create_req(const char *in_uri, const coap_response_handler_t &h
         return;
     }
 
+    // Timeout functionality.
     int wait_ms = (coap_session_get_default_leisure(session).integer_part + 1) * 1000;
     if (const int res = coap_io_process(ctx, 1000); res >= 0 && wait_ms > 0) {
         if (static_cast<unsigned>(res) >= wait_ms) {
