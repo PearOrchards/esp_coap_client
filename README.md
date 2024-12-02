@@ -87,14 +87,7 @@ project/
 
 ### Updating CMakeLists.txt
 
-The root `CMakeLists.txt` _should_ be okay left alone, though you may need to add the following line if you use CI/CD:
-```cmake
-if (CI)
-    ...
-    add_subdirectory(components/CoAPClient)
-    ...
-endif()
-```
+The root `CMakeLists.txt` _should_ be okay left alone, though you may need to add something for CI. _An example was previously written here but, turns out, it doesn't work, so I've removed it._
 
 The `main/CMakeLists.txt` should look like this (at the minimum):
 ```cmake
