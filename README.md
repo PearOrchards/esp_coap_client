@@ -49,6 +49,7 @@ static void client(void *p) {
             ESP_LOGI(TAG, "Data received! %.*s", len, data);
         }
 
+        coap_session_release(session);
         return COAP_RESPONSE_OK;
     };
 
